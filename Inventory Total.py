@@ -1,33 +1,31 @@
 import sqlite3
 from tkinter import *
-conn = sqlite3.connect('/Users/josh/PycharmProjects/POS/inventory_book.db')
+import xlwt as xw
+
+conn = sqlite3.connect('/Volumes/HD/PycharmProjects/POS/inventory_book.db ')
 
 c = conn.cursor()
 
 c.execute("SELECT *, oid FROM inventory")
 records = c.fetchall()
 
+wb = xw.Workbook() 
 
-# root = Tk()
-# root.title('Testing')
-# root.geometry('1000x1000')
+sheet1 = wb.add_sheet('Sheet 1') 
 
-# for i in range(len(records)):
-#     Label(root, text= records[i][0]).grid(row=i, column=0)
-#     Label(root, text=records[i][1]).grid(row=i, column=1)
-#     Label(root, text=records[i][2]).grid(row=i, column=2)
-#     Label(root, text=records[i][3]).grid(row=i, column=3)
-#     Label(root, text=records[i][4]).grid(row=i, column=4)
+sheet1.write(0,1, "name")
+sheet1.write(0,2, "cost")
+sheet1.write(0,3, "quantity")
 
-sumit = 0
+counter = 1
 
-for record in records:
-    item = 0
-    item = record[2] * record[3]
-    sumit += item
-    #print(sumit, record[4])
 
-print(sumit)
+for i in range(len(records)):
+	sheet1.write(counter, 1, record[i][1])
+	sheet1.write(counter, 1, record[i][2])
+	sheet1.write(counter, 1, record[i][3])
+
+wb.save('inventory.xls')
 
 conn.commit()
 conn.close()
